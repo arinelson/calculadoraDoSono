@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
+            <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8QDBL8W0MD"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-8QDBL8W0MD');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Ciclos de Sono</title>
@@ -15,14 +26,6 @@
         .time-input::-webkit-calendar-picker-indicator {
             filter: invert(1);
         }
-        .tab-active {
-            background-color: #4f46e5;
-            color: white;
-        }
-        .tab-inactive {
-            background-color: #374151;
-            color: #d1d5db;
-        }
         /* Style for the FAQ accordion */
         details > summary {
             list-style: none;
@@ -32,6 +35,28 @@
         }
         details[open] summary svg.chevron {
             transform: rotate(180deg);
+        }
+        /* Style for the typewriter cursor */
+        #typewriter-container .cursor {
+            display: inline-block;
+            width: 4px;
+            background-color: currentColor;
+            animation: blink 1s infinite;
+            margin-left: 4px;
+            vertical-align: bottom;
+            height: 1em; /* Match the font size */
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        /* Ensure title has a minimum height to prevent layout shift */
+        #typewriter-container {
+            min-height: 56px; /* Adjust based on your font size */
+        }
+        @media (min-width: 768px) {
+            #typewriter-container {
+                min-height: 64px;
+            }
         }
     </style>
 </head>
@@ -44,7 +69,11 @@
 
             <!-- Header -->
             <header class="text-center space-y-4">
-                <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Calculadora de Sono</h1>
+                <div id="typewriter-container" class="text-4xl md:text-5xl font-bold flex items-center justify-center">
+                    <h1 id="typewriter-title" class="text-transparent bg-clip-text transition-all duration-500">
+                        <span id="typewriter-text"></span><span class="cursor"></span>
+                    </h1>
+                </div>
                 <p class="text-indigo-200 text-lg max-w-xl mx-auto">Acorde com mais energia. Durma com mais consciência.</p>
                 <p class="text-gray-400 max-w-2xl mx-auto">
                     O segredo de uma boa noite de sono não está apenas em <span class="text-white">quantas</span> horas você dorme, mas em <span class="text-white">quando</span> você acorda. Esta ferramenta ajuda você a alinhar seu despertar com o fim de um ciclo de sono, evitando a inércia e garantindo que você se sinta revigorado.
@@ -54,28 +83,37 @@
             <!-- Calculator Card -->
             <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl border border-gray-700 shadow-2xl shadow-indigo-900/20">
                 
-                <!-- Tabs for Calculation Mode -->
-                <div class="grid grid-cols-2 gap-2 mb-6 bg-gray-900 p-1 rounded-lg max-w-md mx-auto">
-                    <button id="tab-wake" class="tab-active w-full py-2.5 rounded-md font-semibold transition-all duration-300">Quero Acordar Às...</button>
-                    <button id="tab-sleep" class="tab-inactive w-full py-2.5 rounded-md font-semibold transition-all duration-300">Vou Dormir Às...</button>
+                <!-- NEW: Sliding Tabs for Calculation Mode -->
+                <div id="tabs-container" class="relative flex w-full max-w-md mx-auto bg-gray-900 p-1 rounded-full">
+                    <div id="tabs-slider" class="absolute top-1 bottom-1 left-1 w-1/2 bg-indigo-600 rounded-full transition-transform duration-300 ease-in-out"></div>
+                    <button id="tab-wake" class="relative z-10 w-1/2 py-2.5 rounded-full text-sm font-semibold flex items-center justify-center gap-2 transition-colors duration-300">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>
+                        Quero Acordar Às...
+                    </button>
+                    <button id="tab-sleep" class="relative z-10 w-1/2 py-2.5 rounded-full text-sm font-semibold flex items-center justify-center gap-2 transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
+                        Vou Dormir Às...
+                    </button>
                 </div>
 
                 <!-- Calculation Inputs -->
-                <div id="calc-wake-section">
-                    <label for="wake-up-time" class="block mb-2 font-medium text-gray-300 text-center">Quero acordar às:</label>
-                    <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                        <input type="time" id="wake-up-time" class="time-input bg-gray-700 border border-gray-600 rounded-lg w-full p-3 text-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" value="07:00">
-                        <button id="calculate-sleep-time" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">Calcular</button>
+                <div class="mt-6">
+                    <div id="calc-wake-section">
+                        <label for="wake-up-time" class="block mb-2 font-medium text-gray-300 text-center">Quero acordar às:</label>
+                        <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                            <input type="time" id="wake-up-time" class="time-input bg-gray-700 border border-gray-600 rounded-lg w-full p-3 text-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <button id="calculate-sleep-time" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">Calcular</button>
+                        </div>
                     </div>
-                </div>
 
-                <div id="calc-sleep-section" class="hidden">
-                    <label for="sleep-time" class="block mb-2 font-medium text-gray-300 text-center">Vou dormir às:</label>
-                     <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                        <input type="time" id="sleep-time" class="time-input bg-gray-700 border border-gray-600 rounded-lg w-full p-3 text-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <div class="flex gap-4 w-full sm:w-auto">
-                           <button id="calculate-wake-time" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">Calcular</button>
-                           <button id="sleep-now-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">Agora</button>
+                    <div id="calc-sleep-section" class="hidden">
+                        <label for="sleep-time" class="block mb-2 font-medium text-gray-300 text-center">Vou dormir às:</label>
+                         <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                            <input type="time" id="sleep-time" class="time-input bg-gray-700 border border-gray-600 rounded-lg w-full p-3 text-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <div class="flex gap-4 w-full sm:w-auto">
+                               <button id="calculate-wake-time" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">Calcular</button>
+                               <button id="sleep-now-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">Agora</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -266,7 +304,7 @@
                     Lembre-se: esta calculadora é uma ferramenta educativa. Para problemas persistentes de sono, consulte um profissional de saúde.
                 </p>
                 <p class="mb-2">
-                    © 2024 Calculadora de Ciclos de Sono. Feito por <a href="arinelson.space/links" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline">Arinelson Santos</a>.
+                    © 2024 Calculadora de Ciclos de Sono. Feito por <a href="https://arinelsonlinks.netlify.app/" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline">Arinelson Santos</a>.
                 </p>
                 <p class="text-gray-500">Baseado em pesquisas científicas sobre o sono.</p>
             </footer>
@@ -278,6 +316,8 @@
         // --- DOM Elements ---
         const tabWake = document.getElementById('tab-wake');
         const tabSleep = document.getElementById('tab-sleep');
+        const tabsSlider = document.getElementById('tabs-slider');
+
         const calcWakeSection = document.getElementById('calc-wake-section');
         const calcSleepSection = document.getElementById('calc-sleep-section');
         
@@ -289,10 +329,24 @@
         const sleepNowBtn = document.getElementById('sleep-now-btn');
         
         const resultsContainer = document.getElementById('results-container');
+        const typewriterTitle = document.getElementById('typewriter-title');
+        const typewriterText = document.getElementById('typewriter-text');
 
         // --- Constants ---
         const CYCLE_DURATION_MS = 90 * 60 * 1000; // 90 minutes in milliseconds
         const FALL_ASLEEP_TIME_MS = 15 * 60 * 1000; // 15 minutes in milliseconds
+        
+        const typewritingConfig = [
+            { text: 'Calculadora de Sono', gradient: 'bg-gradient-to-r from-indigo-400 to-purple-400' },
+            { text: 'Durma melhor', gradient: 'bg-gradient-to-r from-green-400 to-blue-400' },
+            { text: 'Viva melhor', gradient: 'bg-gradient-to-r from-amber-400 to-orange-400' }
+        ];
+
+        // --- Typewriter variables ---
+        let configIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let currentGradientClasses = [];
 
         // --- Functions ---
         function formatTime(date) {
@@ -308,17 +362,21 @@
 
         function switchTab(activeTab) {
             if (activeTab === 'wake') {
-                tabWake.classList.remove('tab-inactive');
-                tabWake.classList.add('tab-active');
-                tabSleep.classList.remove('tab-active');
-                tabSleep.classList.add('tab-inactive');
+                tabsSlider.style.transform = 'translateX(0%)';
+                tabWake.classList.add('text-white');
+                tabWake.classList.remove('text-gray-400');
+                tabSleep.classList.add('text-gray-400');
+                tabSleep.classList.remove('text-white');
+
                 calcWakeSection.classList.remove('hidden');
                 calcSleepSection.classList.add('hidden');
             } else {
-                tabSleep.classList.remove('tab-inactive');
-                tabSleep.classList.add('tab-active');
-                tabWake.classList.remove('tab-active');
-                tabWake.classList.add('tab-inactive');
+                tabsSlider.style.transform = 'translateX(100%)';
+                tabSleep.classList.add('text-white');
+                tabSleep.classList.remove('text-gray-400');
+                tabWake.classList.add('text-gray-400');
+                tabWake.classList.remove('text-white');
+
                 calcSleepSection.classList.remove('hidden');
                 calcWakeSection.classList.add('hidden');
                 if (!sleepTimeInput.value) {
@@ -351,6 +409,10 @@
         }
         
         function handleCalculateSleepTime() {
+            if (!wakeUpTimeInput.value) {
+                resultsContainer.innerHTML = `<p class="text-center text-gray-400">Por favor, insira um horário para calcular.</p>`;
+                return;
+            }
             const [hours, minutes] = wakeUpTimeInput.value.split(':').map(Number);
             if (isNaN(hours) || isNaN(minutes)) return;
 
@@ -370,6 +432,10 @@
         }
 
         function handleCalculateWakeTime() {
+            if (!sleepTimeInput.value) {
+                resultsContainer.innerHTML = `<p class="text-center text-gray-400">Por favor, insira um horário para calcular.</p>`;
+                return;
+            }
             const [hours, minutes] = sleepTimeInput.value.split(':').map(Number);
             if (isNaN(hours) || isNaN(minutes)) return;
 
@@ -390,29 +456,68 @@
             displayResults(title, wakeTimes, subtitle, 4);
         }
 
+        function typeEffect() {
+            const currentConfig = typewritingConfig[configIndex];
+            const currentText = currentConfig.text;
+            const displayedText = currentText.substring(0, charIndex);
+
+            // Update text and gradient
+            typewriterText.textContent = displayedText;
+            const newGradientClasses = currentConfig.gradient.split(' ');
+            if (currentGradientClasses.length > 0) {
+                typewriterTitle.classList.remove(...currentGradientClasses);
+            }
+            typewriterTitle.classList.add(...newGradientClasses);
+            currentGradientClasses = newGradientClasses;
+
+
+            if (!isDeleting && charIndex < currentText.length) {
+                // Typing forward
+                charIndex++;
+                setTimeout(typeEffect, 120);
+            } else if (isDeleting && charIndex > 0) {
+                // Deleting
+                charIndex--;
+                setTimeout(typeEffect, 80);
+            } else {
+                // Switch mode (typing -> deleting or deleting -> typing)
+                isDeleting = !isDeleting;
+                if (!isDeleting) {
+                    // Move to the next text after finishing deleting
+                    configIndex = (configIndex + 1) % typewritingConfig.length;
+                }
+                // Add a pause before starting to delete or starting to type the next word
+                setTimeout(typeEffect, isDeleting ? 2000 : 500);
+            }
+        }
 
         // --- Event Listeners ---
-        tabWake.addEventListener('click', () => switchTab('wake'));
-        tabSleep.addEventListener('click', () => switchTab('sleep'));
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial tab state
+            switchTab('wake');
 
-        calculateSleepTimeBtn.addEventListener('click', handleCalculateSleepTime);
-        wakeUpTimeInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleCalculateSleepTime();
-        });
+            tabWake.addEventListener('click', () => switchTab('wake'));
+            tabSleep.addEventListener('click', () => switchTab('sleep'));
 
-        calculateWakeTimeBtn.addEventListener('click', handleCalculateWakeTime);
-        sleepTimeInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleCalculateWakeTime();
-        });
+            calculateSleepTimeBtn.addEventListener('click', handleCalculateSleepTime);
+            wakeUpTimeInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') handleCalculateSleepTime();
+            });
 
-        sleepNowBtn.addEventListener('click', () => {
+            calculateWakeTimeBtn.addEventListener('click', handleCalculateWakeTime);
+            sleepTimeInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') handleCalculateWakeTime();
+            });
+
+            sleepNowBtn.addEventListener('click', () => {
+                setCurrentTime(sleepTimeInput);
+                handleCalculateWakeTime();
+            });
+
+            // --- Initial State ---
             setCurrentTime(sleepTimeInput);
-            handleCalculateWakeTime();
+            typeEffect(); // Start the typewriter effect
         });
-
-        // --- Initial State ---
-        setCurrentTime(sleepTimeInput);
-        handleCalculateSleepTime();
 
     </script>
 </body>
