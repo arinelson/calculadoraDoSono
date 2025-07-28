@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Ciclos de Sono</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .time-input::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+        .tab-active {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .tab-inactive {
+            background-color: #374151;
+            color: #d1d5db;
+        }
+        /* Style for the FAQ accordion */
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] summary svg.chevron {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white antialiased">
+
+    <div class="min-h-screen flex flex-col items-center p-4 bg-gradient-to-br from-gray-900 via-indigo-900/50 to-gray-900">
+        
+        <!-- Main Container -->
+        <main class="w-full max-w-4xl mx-auto space-y-12 my-12">
+
+            <!-- Header -->
+            <header class="text-center space-y-4">
+                <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Calculadora de Sono</h1>
+                <p class="text-indigo-200 text-lg max-w-xl mx-auto">Acorde com mais energia. Durma com mais consciência.</p>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    O segredo de uma boa noite de sono não está apenas em <span class="text-white">quantas</span> horas você dorme, mas em <span class="text-white">quando</span> você acorda. Esta ferramenta ajuda você a alinhar seu despertar com o fim de um ciclo de sono, evitando a inércia e garantindo que você se sinta revigorado.
+                </p>
+            </header>
+
+            <!-- Calculator Card -->
+            <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl border border-gray-700 shadow-2xl shadow-indigo-900/20">
+                
+                <!-- Tabs for Calculation Mode -->
+                <div class="grid grid-cols-2 gap-2 mb-6 bg-gray-900 p-1 rounded-lg max-w-md mx-auto">
+                    <button id="tab-wake" class="tab-active w-full py-2.5 rounded-md font-semibold transition-all duration-300">Quero Acordar Às...</button>
+                    <button id="tab-sleep" class="tab-inactive w-full py-2.5 rounded-md font-semibold transition-all duration-300">Vou Dormir Às...</button>
+                </div>
+
+                <!-- Calculation Inputs -->
+                <div id="calc-wake-section">
+                    <label for="wake-up-time" class="block mb-2 font-medium text-gray-300 text-center">Quero acordar às:</label>
+                    <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                        <input type="time" id="wake-up-time" class="time-input bg-gray-700 border border-gray-600 rounded-lg w-full p-3 text-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" value="07:00">
+                        <button id="calculate-sleep-time" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">Calcular</button>
+                    </div>
+                </div>
+
+                <div id="calc-sleep-section" class="hidden">
+                    <label for="sleep-time" class="block mb-2 font-medium text-gray-300 text-center">Vou dormir às:</label>
+                     <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                        <input type="time" id="sleep-time" class="time-input bg-gray-700 border border-gray-600 rounded-lg w-full p-3 text-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <div class="flex gap-4 w-full sm:w-auto">
+                           <button id="calculate-wake-time" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">Calcular</button>
+                           <button id="sleep-now-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">Agora</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="results-container" class="mt-8">
+                    <!-- Results will be injected here -->
+                </div>
+            </div>
+
+            <!-- Understand Sleep Cycles Section -->
+            <section class="text-center">
+                <h2 class="text-3xl font-bold text-white mb-2">Entenda os Ciclos de Sono</h2>
+                <p class="text-gray-400 mb-8">Cada ciclo de sono dura aproximadamente 90 minutos e passa por diferentes estágios</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Stage 1 -->
+                    <div class="bg-gray-800/50 p-6 rounded-2xl border border-gray-700 text-left space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-blue-500/10 p-2 rounded-full"><svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+                            <h3 class="text-xl font-bold">Estágio 1</h3>
+                        </div>
+                        <p class="font-semibold text-indigo-300">Sonolência</p>
+                        <p class="text-gray-300 text-sm">Transição entre vigília e sono. Músculos relaxam e ondas cerebrais diminuem.</p>
+                    </div>
+                    <!-- Stage 2 -->
+                    <div class="bg-gray-800/50 p-6 rounded-2xl border border-gray-700 text-left space-y-3">
+                        <div class="flex items-center gap-3">
+                             <div class="bg-green-500/10 p-2 rounded-full"><svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></div>
+                            <h3 class="text-xl font-bold">Estágio 2</h3>
+                        </div>
+                        <p class="font-semibold text-indigo-300">Sono Leve</p>
+                        <p class="text-gray-300 text-sm">Temperatura corporal diminui, frequência cardíaca desacelera. Fácil de acordar.</p>
+                    </div>
+                    <!-- Stage 3 -->
+                    <div class="bg-gray-800/50 p-6 rounded-2xl border border-gray-700 text-left space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-purple-500/10 p-2 rounded-full"><svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg></div>
+                            <h3 class="text-xl font-bold">Estágio 3</h3>
+                        </div>
+                        <p class="font-semibold text-indigo-300">Sono Profundo</p>
+                        <p class="text-gray-300 text-sm">Sono reparador. Crescimento e reparação celular. Difícil de acordar.</p>
+                    </div>
+                    <!-- REM -->
+                    <div class="bg-gray-800/50 p-6 rounded-2xl border border-gray-700 text-left space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-orange-500/10 p-2 rounded-full"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg></div>
+                            <h3 class="text-xl font-bold">REM</h3>
+                        </div>
+                        <p class="font-semibold text-indigo-300">Sonhos</p>
+                        <p class="text-gray-300 text-sm">Movimento rápido dos olhos. Sonhos vívidos. Consolidação da memória.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tips for Better Sleep Quality Section -->
+            <section class="text-center">
+                <h2 class="text-3xl font-bold text-white mb-2">Dicas para Melhor Qualidade do Sono</h2>
+                <p class="text-gray-400 mb-8">Práticas simples que podem transformar a qualidade do seu sono</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Tip Card 1 -->
+                    <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 text-left">
+                        <h3 class="text-lg font-semibold text-indigo-300 mb-3">Ambiente Ideal</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm list-disc list-inside">
+                            <li>Quarto escuro e silencioso</li>
+                            <li>Temperatura entre 18-22°C</li>
+                            <li>Colchão e travesseiros confortáveis</li>
+                            <li>Evite telas 1h antes de dormir</li>
+                        </ul>
+                    </div>
+                    <!-- Tip Card 2 -->
+                    <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 text-left">
+                        <h3 class="text-lg font-semibold text-indigo-300 mb-3">Rotina Consistente</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm list-disc list-inside">
+                            <li>Durma e acorde no mesmo horário</li>
+                            <li>Crie um ritual relaxante</li>
+                            <li>Evite sonecas após 15h</li>
+                            <li>Exponha-se à luz natural pela manhã</li>
+                        </ul>
+                    </div>
+                    <!-- Tip Card 3 -->
+                    <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 text-left">
+                        <h3 class="text-lg font-semibold text-indigo-300 mb-3">Hábitos Saudáveis</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm list-disc list-inside">
+                            <li>Evite cafeína 6h antes de dormir</li>
+                            <li>Não coma refeições pesadas à noite</li>
+                            <li>Pratique exercícios regularmente</li>
+                            <li>Gerencie o estresse e ansiedade</li>
+                        </ul>
+                    </div>
+                     <!-- Tip Card 4 -->
+                    <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 text-left">
+                        <h3 class="text-lg font-semibold text-indigo-300 mb-3">Sinais de Alerta</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm list-disc list-inside">
+                            <li>Ronco excessivo</li>
+                            <li>Sonolência diurna constante</li>
+                            <li>Dificuldade para adormecer</li>
+                            <li>Acordar frequentemente</li>
+                        </ul>
+                    </div>
+                     <!-- Tip Card 5 -->
+                    <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 text-left">
+                        <h3 class="text-lg font-semibold text-indigo-300 mb-3">Despertar Natural</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm list-disc list-inside">
+                            <li>Use despertador com luz gradual</li>
+                            <li>Evite o botão soneca</li>
+                            <li>Beba água ao acordar</li>
+                            <li>Faça alongamentos leves</li>
+                        </ul>
+                    </div>
+                     <!-- Tip Card 6 -->
+                    <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 text-left">
+                        <h3 class="text-lg font-semibold text-indigo-300 mb-3">Relaxamento</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm list-disc list-inside">
+                            <li>Técnicas de respiração</li>
+                            <li>Meditação ou mindfulness</li>
+                            <li>Leitura relaxante</li>
+                            <li>Banho morno antes de dormir</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 max-w-2xl mx-auto">
+                <h3 class="font-semibold text-xl text-indigo-300 mb-4 text-center">Perguntas Frequentes (FAQ)</h3>
+                <div class="space-y-4">
+                    <details class="bg-gray-800 p-4 rounded-lg group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer">
+                            <span>Esta ferramenta é gratuita?</span>
+                            <svg class="chevron w-5 h-5 text-gray-400 group-hover:text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <p class="text-gray-300 mt-3 pt-3 border-t border-gray-700">
+                            Sim, a Calculadora de Ciclos de Sono é 100% gratuita. Nosso objetivo é oferecer uma ferramenta acessível para ajudar as pessoas a melhorarem a qualidade do seu descanso.
+                        </p>
+                    </details>
+                    <details class="bg-gray-800 p-4 rounded-lg group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer">
+                            <span>Qual o objetivo do site?</span>
+                            <svg class="chevron w-5 h-5 text-gray-400 group-hover:text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <p class="text-gray-300 mt-3 pt-3 border-t border-gray-700">
+                            O objetivo é educar sobre a importância dos ciclos de sono e fornecer uma maneira simples de planejar suas noites. Ao entender como seu sono funciona, você pode tomar decisões melhores para acordar com mais disposição e energia, mesmo que nem sempre consiga dormir o ideal.
+                        </p>
+                    </details>
+                    <details class="bg-gray-800 p-4 rounded-lg group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer">
+                            <span>E se eu tiver que dormir pouco? Qual a vantagem?</span>
+                            <svg class="chevron w-5 h-5 text-gray-400 group-hover:text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <p class="text-gray-300 mt-3 pt-3 border-t border-gray-700">
+                            Essa é uma ótima pergunta e um "hack" útil para emergências. Se você teve um imprevisto e só pode dormir por 3 ou 4 horas, a vantagem de usar a calculadora é <span class="text-white font-semibold">evitar acordar no meio de um ciclo de sono profundo</span>, o que causa aquela sensação terrível de cansaço. Acordar ao final de um ciclo, mesmo que você tenha dormido pouco, torna o despertar mais suave. <br><br><strong>Atenção:</strong> Use isso como um recurso esporádico, não como um hábito. A prioridade deve ser sempre buscar uma noite de sono completa.
+                        </p>
+                    </details>
+                    <details class="bg-gray-800 p-4 rounded-lg group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer">
+                            <span>Por que 90 minutos? Esse valor é exato?</span>
+                            <svg class="chevron w-5 h-5 text-gray-400 group-hover:text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <p class="text-gray-300 mt-3 pt-3 border-t border-gray-700">
+                            Os 90 minutos são uma média. A duração de um ciclo de sono pode variar de 70 a 110 minutos dependendo da pessoa, idade e até da noite. Use os 90 minutos como um excelente ponto de partida e observe como seu corpo reage.
+                        </p>
+                    </details>
+                    <details class="bg-gray-800 p-4 rounded-lg group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer">
+                            <span>E se eu acordar no meio da noite?</span>
+                            <svg class="chevron w-5 h-5 text-gray-400 group-hover:text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <p class="text-gray-300 mt-3 pt-3 border-t border-gray-700">
+                            É normal ter breves despertares. Se você acordar e não conseguir voltar a dormir, não se estresse. Levante-se, faça uma atividade relaxante (como ler com pouca luz) e volte para a cama quando sentir sono novamente. Não reinicie a contagem dos ciclos.
+                        </p>
+                    </details>
+                     <details class="bg-gray-800 p-4 rounded-lg group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer">
+                            <span>E os 15 min para adormecer? E se eu demorar mais?</span>
+                            <svg class="chevron w-5 h-5 text-gray-400 group-hover:text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <p class="text-gray-300 mt-3 pt-3 border-t border-gray-700">
+                           Os 15 minutos são uma estimativa. Se você costuma demorar mais, ajuste o cálculo. Por exemplo, se leva 30 minutos, vá para a cama 15 minutos mais cedo do que o horário calculado. O importante é conhecer seu próprio corpo.
+                        </p>
+                    </details>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="text-center text-gray-400 text-sm mt-8 border-t border-gray-700 pt-8 pb-4">
+                <h4 class="font-semibold text-lg text-gray-200 mb-2">Durma Melhor, Viva Melhor</h4>
+                <p class="max-w-md mx-auto mb-4 text-gray-500">
+                    Lembre-se: esta calculadora é uma ferramenta educativa. Para problemas persistentes de sono, consulte um profissional de saúde.
+                </p>
+                <p class="mb-2">
+                    © 2024 Calculadora de Ciclos de Sono. Feito por <a href="arinelson.space/links" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline">Arinelson Santos</a>.
+                </p>
+                <p class="text-gray-500">Baseado em pesquisas científicas sobre o sono.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        // --- DOM Elements ---
+        const tabWake = document.getElementById('tab-wake');
+        const tabSleep = document.getElementById('tab-sleep');
+        const calcWakeSection = document.getElementById('calc-wake-section');
+        const calcSleepSection = document.getElementById('calc-sleep-section');
+        
+        const calculateSleepTimeBtn = document.getElementById('calculate-sleep-time');
+        const wakeUpTimeInput = document.getElementById('wake-up-time');
+        
+        const calculateWakeTimeBtn = document.getElementById('calculate-wake-time');
+        const sleepTimeInput = document.getElementById('sleep-time');
+        const sleepNowBtn = document.getElementById('sleep-now-btn');
+        
+        const resultsContainer = document.getElementById('results-container');
+
+        // --- Constants ---
+        const CYCLE_DURATION_MS = 90 * 60 * 1000; // 90 minutes in milliseconds
+        const FALL_ASLEEP_TIME_MS = 15 * 60 * 1000; // 15 minutes in milliseconds
+
+        // --- Functions ---
+        function formatTime(date) {
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        function setCurrentTime(inputElement) {
+            const now = new Date();
+            inputElement.value = formatTime(now);
+        }
+
+        function switchTab(activeTab) {
+            if (activeTab === 'wake') {
+                tabWake.classList.remove('tab-inactive');
+                tabWake.classList.add('tab-active');
+                tabSleep.classList.remove('tab-active');
+                tabSleep.classList.add('tab-inactive');
+                calcWakeSection.classList.remove('hidden');
+                calcSleepSection.classList.add('hidden');
+            } else {
+                tabSleep.classList.remove('tab-inactive');
+                tabSleep.classList.add('tab-active');
+                tabWake.classList.remove('tab-active');
+                tabWake.classList.add('tab-inactive');
+                calcSleepSection.classList.remove('hidden');
+                calcWakeSection.classList.add('hidden');
+                if (!sleepTimeInput.value) {
+                    setCurrentTime(sleepTimeInput);
+                }
+            }
+            resultsContainer.innerHTML = ''; 
+        }
+
+        function displayResults(title, times, subtitle, idealCycleIndex = -1) {
+            let timesHtml = times.map((time, index) => {
+                const isIdeal = index === idealCycleIndex;
+                const idealClass = isIdeal ? 'bg-indigo-500 text-white' : 'bg-gray-600';
+                const idealText = isIdeal ? '<span class="text-xs font-medium text-indigo-200 ml-2">(Ideal)</span>' : '';
+                return `<div class="p-3 rounded-lg text-center ${idealClass}">
+                            <span class="font-bold text-xl">${time}</span>
+                            ${idealText}
+                        </div>`;
+            }).join('');
+
+            resultsContainer.innerHTML = `
+                <div class="bg-gray-700/50 p-6 rounded-lg max-w-md mx-auto">
+                    <h3 class="font-semibold text-lg text-gray-200 mb-4 text-center">${title}</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        ${timesHtml}
+                    </div>
+                    ${subtitle ? `<p class="text-sm text-gray-400 mt-4 text-center">${subtitle}</p>` : ''}
+                </div>
+            `;
+        }
+        
+        function handleCalculateSleepTime() {
+            const [hours, minutes] = wakeUpTimeInput.value.split(':').map(Number);
+            if (isNaN(hours) || isNaN(minutes)) return;
+
+            const wakeUpDate = new Date();
+            wakeUpDate.setHours(hours, minutes, 0, 0);
+
+            const sleepTimes = [];
+            for (let i = 6; i >= 1; i--) {
+                const cycleMillis = i * CYCLE_DURATION_MS;
+                const sleepTime = new Date(wakeUpDate.getTime() - cycleMillis);
+                sleepTimes.push(formatTime(sleepTime));
+            }
+
+            const title = `Para acordar às ${wakeUpTimeInput.value}, durma em um destes horários:`;
+            const subtitle = `Lembre-se: a maioria das pessoas leva cerca de 15 minutos para adormecer.`;
+            displayResults(title, sleepTimes, subtitle, 1);
+        }
+
+        function handleCalculateWakeTime() {
+            const [hours, minutes] = sleepTimeInput.value.split(':').map(Number);
+            if (isNaN(hours) || isNaN(minutes)) return;
+
+            const sleepDate = new Date();
+            sleepDate.setHours(hours, minutes, 0, 0);
+
+            const fallAsleepDate = new Date(sleepDate.getTime() + FALL_ASLEEP_TIME_MS);
+
+            const wakeTimes = [];
+            for (let i = 1; i <= 6; i++) {
+                const cycleMillis = i * CYCLE_DURATION_MS;
+                const wakeTime = new Date(fallAsleepDate.getTime() + cycleMillis);
+                wakeTimes.push(formatTime(wakeTime));
+            }
+            
+            const title = `Se você dormir às ${sleepTimeInput.value}, acorde em um destes horários:`;
+            const subtitle = `Calculado considerando 15 minutos para você pegar no sono.`;
+            displayResults(title, wakeTimes, subtitle, 4);
+        }
+
+
+        // --- Event Listeners ---
+        tabWake.addEventListener('click', () => switchTab('wake'));
+        tabSleep.addEventListener('click', () => switchTab('sleep'));
+
+        calculateSleepTimeBtn.addEventListener('click', handleCalculateSleepTime);
+        wakeUpTimeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleCalculateSleepTime();
+        });
+
+        calculateWakeTimeBtn.addEventListener('click', handleCalculateWakeTime);
+        sleepTimeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleCalculateWakeTime();
+        });
+
+        sleepNowBtn.addEventListener('click', () => {
+            setCurrentTime(sleepTimeInput);
+            handleCalculateWakeTime();
+        });
+
+        // --- Initial State ---
+        setCurrentTime(sleepTimeInput);
+        handleCalculateSleepTime();
+
+    </script>
+</body>
+</html>
